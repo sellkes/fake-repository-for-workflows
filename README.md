@@ -6,3 +6,5 @@ I hate coding (just kidding Mark it makes me so happy every day)
 
 hello
 committing is hard
+
+committing changes is also hard
