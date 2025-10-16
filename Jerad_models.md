@@ -19,6 +19,7 @@ Anova(monthly_glm_allsp)
 summary(monthly_glm_allsp)
 library(tidyverse)  
 
+#glm for weekly data all species
 weekly_glm_allsp <- glmmTMB(average_value ~ average_chl 
   + Species
   + cape.x
