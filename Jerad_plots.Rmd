@@ -1,0 +1,58 @@
+---
+title: "Jerad Figures"
+output: html_document
+date: "2025-10-24"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#load libraries
+library(ggplot2)
+library(tidyverse)
+library(dbplyr)
+#load data
+All_kelp_data <- read.csv("C:/Users/sellkes/Documents/GitHub/fake-repository-for-workflows/Kelp_Chl_Weekly.csv")
+
+```
+
+
+
+```{r}
+#subset for each sp
+
+Hedophyllum <- subset(All_kelp_data, Species =="Hedophyllum sessile")
+Alaria <- subset(All_kelp_data, Species == "Alaria marginata")
+Egregia <- subset(All_kelp_data, Species == "Egregia menziesii")  
+Postelsia <- subset(All_kelp_data, Species == "Postelsia palmaeformis")  
+Lessoniopsis <- subset(All_kelp_data, Species == "Lessoniopsis littoralis")  
+Laminaria <- subset(All_kelp_data, Species == "Laminaria sinclairii")
+```
+
+```{r}
+#Alaria plot
+
+ggplot(data=Alaria, aes(x=average_value, y=average_chl, group=cape.x, color=cape.x)) +
+ # geom_line(linetype = "dashed")+
+ # geom_point() +
+  geom_smooth(method = 'lm') +
+  scale_color_manual(values = c(
+      "Foulweather" = "#ff0000", 
+    "Perpetua" = "#00ff00", 
+    "Blanco" = "#0000ff"
+  )) +  # Manually specify the colors for each Treatment
+  labs(
+    title = substitute(paste(italic("A. marginata"))),
+    x = "Average recruits per meter squared",
+    y = "Average Chlorophyll Concentration",
+    color = "Cape"
+  ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+```
+
