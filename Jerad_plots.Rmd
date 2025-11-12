@@ -15,6 +15,7 @@ library(tidyverse)
 library(dbplyr)
 #load data
 All_kelp_data <- read.csv("C:/Users/sellkes/Documents/GitHub/fake-repository-for-workflows/Kelp_Chl_Weekly.csv")
+All_kelp_data <- Kelp_Chl_Weekly
 
 ```
 
@@ -33,26 +34,251 @@ Laminaria <- subset(All_kelp_data, Species == "Laminaria sinclairii")
 
 ```{r}
 #Alaria plot
+#add p value 
 
-ggplot(data=Alaria, aes(x=average_value, y=average_chl, group=cape.x, color=cape.x)) +
+summary_Alaria <- Alaria %>%
+  group_by(average_chl) %>%
+  summarise(
+    average_recruits = mean(average_value, na.rm = TRUE),
+    standard_error = sd(average_value, na.rm = TRUE) / sqrt(n())
+  )
+
+ala_plot <- ggplot(summary_Alaria, aes(x = average_recruits, y = average_chl)) +
+  
+  geom_point(color = "grey") + 
+  geom_smooth(method = "lm", se = FALSE, color = "#FF0800") +
+  labs(
+    title = substitute(paste(italic("A. marginata"))),
+    x = bquote('Average Recruits per ' (m^2)),
+    y = 'Average Chlorophyll Concentration (\U00B5g/L)' ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+
+
+ala_plot
+
+```
+
+```{r}
+#Egregia plot
+
+summary_Egregia <- Egregia %>%
+  group_by(average_chl) %>%
+  summarise(
+    average_recruits = mean(average_value, na.rm = TRUE),
+    standard_error = sd(average_value, na.rm = TRUE) / sqrt(n())
+  )
+
+
+
+egr_plot <- ggplot(summary_Egregia, aes(x = average_recruits, y = average_chl)) +
+   #geom_rect(aes(xmin = ymd("2023-04-01"), xmax = ymd("2023-07-15"), ymin = 0, ymax = Inf), 
+         #  size = 1, fill="grey", alpha = 0.05) +
+  # geom_rect(aes(xmin = ymd("2024-04-01"), xmax = ymd("2024-07-15"), ymin = 0, ymax = Inf), 
+ #          size = 1, fill="grey", alpha = 0.05) +
+  geom_point(color = "grey") +  # Points for average recruits
+ # geom_errorbar(aes(ymin = average_recruits - standard_error, 
+                   # ymax = average_recruits + standard_error),
+               # width = 0.2, color = "grey") +  # Error bars
+  geom_smooth(method = "lm", se = FALSE, color = "darkorange2") +
+  #scale_x_date(labels = scales::date_format("%b %Y"), breaks = "2 month") +
+  labs(
+    title = substitute(paste(italic("E. menziesii"))),
+    x = bquote('Average Recruits per ' (m^2)),
+    y = 'Average Chlorophyll Concentration (\U00B5g/L)' ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+
+#ggplot(data=summary_Egregia, aes(x=average_recruits, y=average_chl)) +
+ # geom_line(linetype = "dashed")+
+ # geom_point() +
+ # geom_smooth(method = 'lm') +
+ # scale_color_manual(values = c("black"
+ # )) +  # Manually specify the colors for each Treatment
+ # labs(
+ #   title = substitute(paste(italic("E. menziesii"))),
+ #   x = "Average recruits per meter squared",
+ #   y = "Average Chlorophyll Concentration"
+ # ) +
+ # theme(axis.line = element_line(colour = "black"),
+ #   panel.grid.major = element_blank(),
+ #   panel.grid.minor = element_blank(),
+ #   panel.border = element_blank(),
+ #   panel.background = element_blank()) 
+
+egr_plot
+```
+
+```{r}
+#Hedophyllum plot
+
+summary_Hedophyllum <- Hedophyllum %>%
+  group_by(average_chl) %>%
+  summarise(
+    average_recruits = mean(average_value, na.rm = TRUE),
+    standard_error = sd(average_value, na.rm = TRUE) / sqrt(n())
+  )
+
+hedo_plot <- ggplot(summary_Hedophyllum, aes(x = average_recruits, y = average_chl)) +
+  
+  geom_point(color = "grey") + 
+  geom_smooth(method = "lm", se = FALSE, color = "goldenrod2") +
+  labs(
+    title = substitute(paste(italic("H. sessile"))),
+    x = bquote('Average Recruits per ' (m^2)),
+    y = 'Average Chlorophyll Concentration (\U00B5g/L)' ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+
+
+hedo_plot
+
+```
+
+
+```{r}
+#Lessoniopsis plot
+
+summary_Lessoniopsis <- Lessoniopsis %>%
+  group_by(average_chl) %>%
+  summarise(
+    average_recruits = mean(average_value, na.rm = TRUE),
+    standard_error = sd(average_value, na.rm = TRUE) / sqrt(n())
+  )
+
+less_plot <- ggplot(summary_Lessoniopsis, aes(x = average_recruits, y = average_chl)) +
+  
+  geom_point(color = "grey") + 
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(
+    title = substitute(paste(italic("L. littoralis"))),
+    x = bquote('Average Recruits per ' (m^2)),
+    y = 'Average Chlorophyll Concentration (\U00B5g/L)' ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+
+
+less_plot
+```
+
+
+```{r}
+#Laminaria plot
+
+summary_Laminaria <- Laminaria %>%
+  group_by(average_chl) %>%
+  summarise(
+    average_recruits = mean(average_value, na.rm = TRUE),
+    standard_error = sd(average_value, na.rm = TRUE) / sqrt(n())
+  )
+
+lam_plot <- ggplot(summary_Laminaria, aes(x = average_recruits, y = average_chl)) +
+  
+  geom_point(color = "grey") + 
+  geom_smooth(method = "lm", se = FALSE, color = "#0AAC00") +
+  labs(
+    title = substitute(paste(italic("L. sinclairii"))),
+    x = bquote('Average Recruits per ' (m^2)),
+    y = 'Average Chlorophyll Concentration (\U00B5g/L)' ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+
+
+lam_plot
+```
+
+```{r}
+#postelsia graph
+summary_Postelsia <- Postelsia %>%
+  group_by(average_chl) %>%
+  summarise(
+    average_recruits = mean(average_value, na.rm = TRUE),
+    standard_error = sd(average_value, na.rm = TRUE) / sqrt(n())
+  )
+
+post_plot <- ggplot(summary_Postelsia, aes(x = average_recruits, y = average_chl)) +
+  
+  geom_point(color = "grey") + 
+  geom_smooth(method = "lm", se = FALSE, color = "purple") +
+  labs(
+    title = substitute(paste(italic("P. palmaeformis"))),
+    x = bquote('Average Recruits per ' (m^2)),
+    y = 'Average Chlorophyll Concentration (\U00B5g/L)' ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+
+
+post_plot
+```
+
+
+```{r}
+#all species together in cape
+ggplot(data=All_kelp_data, aes(x=average_value, y=average_chl, group = Species, color=Species)) +
  # geom_line(linetype = "dashed")+
  # geom_point() +
   geom_smooth(method = 'lm') +
-  scale_color_manual(values = c(
-      "Foulweather" = "#ff0000", 
-    "Perpetua" = "#00ff00", 
-    "Blanco" = "#0000ff"
+  scale_color_manual(values = c("red", "orange", "yellow", "green", "blue", "purple"
+   # 'Alaria marginata' = "red"
+   # 'Egregia menziesii' = "orange"
+    #'Hedophyllum sessile' = "yellow"
+    #'Laminaria sinclairii' = "green"
+   # 'Lessoniopsis littoralis' = "blue"
+   # 'Postelsia palmaeformis' = "purple"
   )) +  # Manually specify the colors for each Treatment
   labs(
-    title = substitute(paste(italic("A. marginata"))),
+    title = substitute(paste(italic("All species"))),
     x = "Average recruits per meter squared",
-    y = "Average Chlorophyll Concentration",
-    color = "Cape"
+    y = "Average Chlorophyll Concentration"
   ) +
   theme(axis.line = element_line(colour = "black"),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.border = element_blank(),
     panel.background = element_blank()) 
-```
 
+```
+```{r}
+#all species together in cape
+ggplot(data=All_kelp_data, aes(x=average_value, y=average_chl, group = cape.x, color=cape.x)) +
+ # geom_line(linetype = "dashed")+
+ # geom_point() +
+  geom_smooth(method = 'lm') +
+  scale_color_manual(values = c("orange", "darkgreen", "purple"
+   # 'Alaria marginata' = "red"
+   # 'Egregia menziesii' = "orange"
+    #'Hedophyllum sessile' = "yellow"
+    #'Laminaria sinclairii' = "green"
+   # 'Lessoniopsis littoralis' = "blue"
+   # 'Postelsia palmaeformis' = "purple"
+  )) +  # Manually specify the colors for each Treatment
+  labs(
+    title = substitute(paste(italic("Cape Comparison"))),
+    x = "Average recruits per meter squared",
+    y = "Average Chlorophyll Concentration"
+  ) +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()) 
+
+```
